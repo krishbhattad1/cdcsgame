@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KEEP IT RUNNING</title>
+<style>
+:root{--bg:#fafaf9;--fg:#1c1917;--mut:#78716c;--line:#e7e5e4;--card:#fff;--ok:#16a34a;--bad:#dc2626;--warn:#d97706;--acc:#2563eb;--okbg:#f0fdf4;--badbg:#fef2f2;--warnbg:#fffbeb;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c0a09;--fg:#f5f5f4;--mut:#a8a29e;--line:#292524;--card:#171412;--ok:#4ade80;--bad:#f87171;--warn:#fbbf24;--acc:#60a5fa;--okbg:#0f1f14;--badbg:#2a1212;--warnbg:#241c0a}}
+:root[data-theme="dark"]{--bg:#0c0a09;--fg:#f5f5f4;--mut:#a8a29e;--line:#292524;--card:#171412;--ok:#4ade80;--bad:#f87171;--warn:#fbbf24;--acc:#60a5fa;--okbg:#0f1f14;--badbg:#2a1212;--warnbg:#241c0a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.5;min-height:100vh}
+.w{max-width:520px;margin:0 auto;padding:20px 16px}
+h1{font-size:15px;font-weight:600;letter-spacing:.02em;margin:0 0 20px}
+.lbl{font-size:11px;letter-spacing:.08em;color:var(--mut)}
+.top{display:flex;gap:24px;align-items:flex-end;margin-bottom:20px}
+.top>div{flex:1}
+.top span{color:var(--fg);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
+.meter{height:4px;background:var(--line);border-radius:2px;margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--fg)}
+#grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.n{border:1px solid var(--line);background:var(--card);border-radius:12px;min-height:92px;padding:10px 4px;text-align:center;cursor:pointer;user-select:none;touch-action:manipulation;display:flex;flex-direction:column;justify-content:center}
+.n b{font-size:22px;font-weight:600}
+.n .st{font-size:11px;letter-spacing:.06em;color:var(--ok);margin-top:2px}
+.n .fl{font-size:11px;color:var(--warn);min-height:16px}
+.n.down{background:var(--badbg);border-color:var(--bad)}.n.down .st{color:var(--bad)}
+.n.boot{background:var(--warnbg);border-color:var(--warn)}.n.boot .st{color:var(--warn)}
+.n.sel{outline:2px solid var(--acc);outline-offset:2px}
+#hint{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:20px 0;min-height:72px}
+.bars{display:flex;gap:24px;margin-bottom:16px}
+.bars>div{flex:1}
+#log{min-height:44px;color:var(--mut);font-size:13px;margin-bottom:16px}
+.acts{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+button{font:inherit;font-size:13px;padding:12px 0;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:10px;cursor:pointer;touch-action:manipulation}
+button:hover{border-color:var(--fg)}
+button:active{transform:scale(.97)}
+button small{display:block;color:var(--mut);font-size:11px}
+#ov{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;z-index:9}
+#ov>div{max-width:400px}
+#ov h2{font-size:20px;font-weight:600;margin:0 0 12px}
+#ob{color:var(--mut);line-height:1.8}
+#rk{font-size:56px;font-weight:600}
+#go{font-size:15px;padding:12px 28px;margin-top:20px;background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+:root{--c1:#6366f1;--c2:#06b6d4;--pink:#ec4899;--org:#f97316;--amb:#f59e0b;--bg1:#f5f3ff;--bg2:#ecfeff;--okbg:#dcfce7;--badbg:#fee2e2;--warnbg:#fef3c7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#140d2b;--bg2:#08181f;--okbg:#0f2a1a;--badbg:#3a1414;--warnbg:#33260a}}
+:root[data-theme="dark"]{--bg1:#140d2b;--bg2:#08181f;--okbg:#0f2a1a;--badbg:#3a1414;--warnbg:#33260a}
+body{background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed}
+h1{font-size:19px;font-weight:700;background:linear-gradient(90deg,var(--c1),var(--pink),var(--org));-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
+#t{color:var(--c2)}#sc{color:var(--c1)}
+.meter{height:6px}
+#me{background:linear-gradient(90deg,var(--amb),var(--org))}
+#ml{background:linear-gradient(90deg,var(--org),var(--pink))!important}
+#mp{background:linear-gradient(90deg,var(--c1),var(--pink))!important}
+.n{background:var(--okbg);border:2px solid var(--ok)}
+.n .st{font-weight:600}
+.n.sel{outline:3px solid var(--c1)}
+#hint{border:2px solid var(--c2);box-shadow:0 0 0 4px color-mix(in srgb,var(--c2) 15%,transparent)}
+button[data-a]{color:#fff;border:0;font-weight:600}
+button[data-a] small{color:#ffffffcc}
+button[data-a]:hover{filter:brightness(1.1)}
+[data-a=restart]{background:#3b82f6}[data-a=failover]{background:#8b5cf6}[data-a=recover]{background:#10b981}[data-a=evict]{background:#f97316}[data-a=wait]{background:#64748b}
+#ov{background:linear-gradient(160deg,var(--bg1),var(--bg2))}
+#rk{color:var(--c1)}
+#go{background:linear-gradient(90deg,var(--c1),var(--pink));border:0;color:#fff}
+#skip{display:block;margin:12px auto 0;font-size:13px;padding:8px 16px;background:transparent;color:var(--mut);display:none}
+.pulse{animation:pl 1s infinite}
+@keyframes pl{50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--c1) 35%,transparent)}}
+#ov{overflow:auto}#ov>div{margin:auto;width:100%}
+input,select{font:inherit;font-size:15px;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);width:100%;margin-top:10px}
+#err{color:var(--bad);font-size:13px;min-height:20px;margin-top:6px}
+#lb{margin-top:18px;text-align:left}
+#lb .row{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+#lb .me{font-weight:700;color:var(--c1)}
+#lb .note{font-size:11px;color:var(--mut);margin-top:6px}
+</style></head><body><div class="w">
+<h1>KEEP IT RUNNING</h1>
+<div class="top">
+<div class="lbl">TIME<br><span id="t">90</span></div>
+<div class="lbl">ENERGY<div class="meter"><i id="me"></i></div></div>
+<div class="lbl">SCORE<br><span id="sc">0</span></div>
+</div>
+<div id="grid"></div>
+<div id="hint"></div>
+<div class="bars">
+<div class="lbl">BAD INTERNET<div class="meter"><i id="ml" style="background:var(--warn)"></i></div></div>
+<div class="lbl">MEMORY FULL<div class="meter"><i id="mp" style="background:var(--acc)"></i></div></div>
+</div>
+<div id="log"></div>
+<div class="acts">
+<button data-a="restart">Turn On<small>-15 [1]</small></button>
+<button data-a="failover">Backup<small>-10 [2]</small></button>
+<button data-a="recover">Update<small>-15 [3]</small></button>
+<button data-a="evict">Clean<small>-10 [4]</small></button>
+<button data-a="wait">Rest<small>+30 [5]</small></button>
+</div>
+</div>
+<div id="ov"><div>
+<h2 id="oh">KEEP IT RUNNING</h2>
+<div id="ob">You look after 6 computers that store people's files.<br>Things will break. Fix them for 90 seconds.<br><br>1. Tap a computer.<br>2. Press a button.<br>3. Read the blue box if you're stuck.</div>
+<div id="form"><input id="nm" maxlength="20" placeholder="Your name" autocomplete="off"><select id="br"><option value="" disabled selected>Select branch</option></select><div id="err"></div></div>
+<div id="rk"></div>
+<button id="go">NEXT</button>
+<button id="skip">Skip practice</button>
+<div id="lb"></div>
+</div></div>
+<script>
+const N=6,DUR=90,$=id=>document.getElementById(id),pad=i=>String(i+1).padStart(2,'0');
+let S,timer,sel=0,restAt=0;
+const grid=$('grid'),els=[];
+for(let i=0;i<N;i++){const e=document.createElement('div');e.innerHTML='<b></b><span class="st"></span><span class="fl"></span>';
+ e.addEventListener('pointerdown',()=>{sel=i;if(S)draw()});grid.appendChild(e);els.push(e)}
+const up=n=>n.s==='up';
+const avail=i=>{const n=S.nodes[i];return up(n)||n.fo&&up(S.nodes[(i+1)%N])};
+const alive=()=>S.nodes.map((n,i)=>up(n)?i:-1).filter(i=>i>=0);
+function log(m){S.msgs.unshift(m);S.msgs.length=Math.min(S.msgs.length,2);$('log').innerHTML=S.msgs.join('<br>')}
+function start(){
+ S={t:0,en:100,loss:0,pr:10,ev:3,tu:0,td:0,tc:0,ticks:0,dead:0,over:false,msgs:[],
+  nodes:Array.from({length:N},()=>({s:'up',boot:0,fo:false,stale:false}))};
+ $('ov').style.display='none';$('skip').style.display='none';$('log').innerHTML='';
+ clearInterval(timer);timer=setInterval(tick,100);draw()}
+function crash(i){const n=S.nodes[i];if(!up(n))return;n.s='down';n.fo=false;if(Math.random()<.3)n.stale=true;log('COMPUTER '+pad(i)+' BROKE')}
+function tick(){
+ const dt=.1;S.t+=dt;S.ticks++;
+ S.en=Math.min(100,S.en+(S.loss>40?5:10)*dt);
+ S.loss=Math.max(0,S.loss-10*dt);
+ S.pr=Math.min(100,S.pr+(.8+S.loss/80)*dt);
+ S.ev-=dt;
+ if(S.ev<=0){S.ev=5+Math.random()*3;
+  if(Math.random()<.5){const u=alive();if(u.length)crash(u[Math.random()*u.length|0])}
+  else{S.loss=40+Math.random()*30;log('BAD INTERNET')}
+  if(S.pr>60&&Math.random()<.5)log('MEMORY ALMOST FULL')}
+ if(S.pr>85&&Math.random()<.02){const u=alive();if(u.length)crash(u[Math.random()*u.length|0])}
+ S.nodes.forEach((n,i)=>{
+  if(n.s==='boot'){n.boot-=dt;if(n.boot<=0){n.s='up';n.fo=false;log('COMPUTER '+pad(i)+' IS BACK')}}
+  if(up(n)&&Math.random()<S.loss/100*.006)n.stale=true});
+ const nu=alive().length,da=S.nodes.filter((_,i)=>avail(i)).length/N,
+  co=1-S.nodes.filter((n,i)=>n.stale&&avail(i)).length/N-S.nodes.filter((n,i)=>!avail(i)).length/N*.5;
+ S.tu+=nu>=4?1:nu/6*.5;S.td+=da;S.tc+=Math.max(0,co);
+ S.dead=nu<3?S.dead+dt:0;
+ if(S.dead>=12)return end(false);
+ if(S.t>=DUR)return end(true);
+ draw()}
+const pct=k=>Math.round(S[k]/Math.max(1,S.ticks)*100);
+function act(a){
+ if(!S||S.over)return;
+ if(S.tut!=null&&S.tut<4&&a!==['','failover','recover','evict'][S.tut])return log('Not now. Follow the blue box.');
+ const n=S.nodes[sel];
+ const cost={restart:15,failover:10,recover:15,evict:10,wait:0}[a];
+ if(a==='wait'){if(restAt>Date.now())return;restAt=Date.now()+1500;S.en=Math.min(100,S.en+30);log('RESTING');return draw()}
+ if(S.en<cost)return log('NOT ENOUGH ENERGY. Press REST');
+ if(a==='restart'){if(up(n))return log('COMPUTER '+pad(sel)+' ALREADY WORKS');if(n.s==='boot')return;n.s='boot';n.boot=2;n.stale=Math.random()<.5}
+ if(a==='failover'){if(up(n)||n.fo)return log('NO BACKUP NEEDED');if(!up(S.nodes[(sel+1)%N]))return log('ITS FRIEND IS BROKEN TOO. Press TURN ON');n.fo=true;if(Math.random()<.2)n.stale=true;log('COMPUTER '+pad((sel+1)%N)+' IS HELPING')}
+ if(a==='recover'){if(!n.stale)return log('FILES ARE ALREADY NEW');if(!avail(sel))return log('FIRST TURN IT ON OR USE BACKUP');n.stale=false;log('UPDATED')}
+ if(a==='evict'){S.pr=Math.max(0,S.pr-50);log('CLEANED UP')}
+ S.en-=cost;draw()}
+function hint(){
+ const dn=S.nodes.findIndex(n=>n.s==='down'&&!n.fo),so=S.nodes.findIndex((n,i)=>n.stale&&avail(i));
+ let m='All good. Press REST or just watch.';
+ if(S.pr>75)m='Memory almost full! Press CLEAN [4].';
+ else if(dn>=0)m='Computer '+pad(dn)+' is broken. Tap it, then press BACKUP [2] (fast) or TURN ON [1].';
+ else if(so>=0)m='Computer '+pad(so)+' has old files. Tap it, then press UPDATE [3].';
+ else if(S.en<25)m='Low energy. Press REST [5].';
+ else if(S.nodes.some(n=>n.s==='boot'))m='Starting up. Wait a moment.';
+ if(S.tut!=null&&S.tut<4)m=TM[S.tut];
+ if($('hint').textContent!==m)$('hint').textContent=m}
+function draw(){
+ tut();
+ S.nodes.forEach((n,i)=>{const e=els[i],c='n'+(n.s==='down'?' down':n.s==='boot'?' boot':'')+(i===sel?' sel':'')+(S.tut===0&&i===2?' pulse':''),
+  st=n.s==='down'?(n.fo?'FRIEND HELPING':'BROKEN'):n.s==='boot'?'STARTING '+n.boot.toFixed(1):'WORKING',fl=n.stale?'OLD FILES':'';
+  if(e.className!==c)e.className=c;
+  if(e.children[0].textContent!==pad(i))e.children[0].textContent=pad(i);
+  if(e.children[1].textContent!==st)e.children[1].textContent=st;
+  if(e.children[2].textContent!==fl)e.children[2].textContent=fl});
+ $('t').textContent=Math.ceil(Math.max(0,DUR-S.t));
+ $('me').style.width=S.en+'%';$('ml').style.width=S.loss+'%';$('mp').style.width=S.pr+'%';
+ $('sc').textContent=Math.round((pct('tu')+pct('td')+pct('tc')));
+ btns.forEach(b=>b.classList.toggle('pulse',S.tut>=1&&S.tut<4&&b.dataset.a===['','failover','recover','evict'][S.tut]));
+ hint()}
+function end(win){
+ S.over=true;clearInterval(timer);draw();mode='play';
+ const s=pct('tu')+pct('td')+pct('tc'),r=s>=270?'S':s>=240?'A':s>=195?'B':s>=150?'C':'D';
+ $('oh').textContent=win?'YOU SURVIVED!':'GAME OVER';
+ $('ob').innerHTML=(win?'':'Too many computers were broken.<br>')+'SCORE '+s+' / 300<br>Working '+pct('tu')+'% · Files available '+pct('td')+'% · Up to date '+pct('tc')+'%';
+ $('rk').textContent=win?r:'F';$('go').textContent='PLAY AGAIN';panels(false,true);submit(s);$('ov').style.display='flex'}
+const TM=['Practice time. Computer 03 just broke (it is red). Tap it.','Good. Now press BACKUP. A neighbour computer takes over, so people can still open their files.','Its files are out of date (it says OLD FILES). Press UPDATE to fix them.','Memory is filling up. If it gets full, computers break. Press CLEAN.'];
+const btns=[...document.querySelectorAll('[data-a]')];
+const slides=['Meet your team of <b>6 computers</b>.<br>Together they store files, like photos and documents, for lots of people.<br>If too many stop working, nobody can open their files.','Your job is to keep them running.<br>Sometimes a computer breaks (it turns red). Sometimes the internet gets bad. Sometimes memory fills up.<br>None of it is your fault. Things just break.','You fix problems with buttons.<br>Each button uses energy, and energy comes back slowly.<br><br>First, a quick practice round. No timer, no pressure.'];
+let mode='form',si=0;
+function showSlide(){$('ob').innerHTML=slides[si];const l=si===slides.length-1;$('go').textContent=l?'TRY A PRACTICE ROUND':'NEXT';$('skip').style.display=l?'block':'none'}
+function startTut(){start();clearInterval(timer);S.tut=0;const n=S.nodes[2];n.s='down';n.stale=true;sel=0;log('COMPUTER 03 BROKE');draw()}
+function tut(){
+ if(S.tut==null||S.tut>=4)return;const n=S.nodes[2];
+ if(S.tut===0&&sel===2)S.tut=1;
+ if(S.tut===1&&n.fo){n.stale=true;S.tut=2}
+ if(S.tut===2&&!n.stale){S.pr=80;S.tut=3}
+ if(S.tut===3&&S.pr<50){S.tut=4;mode='play';
+  $('oh').textContent='NICE WORK!';
+  $('ob').innerHTML='You fixed a broken computer, updated its old files and cleaned the memory.<br><br>Two more buttons:<br>TURN ON also fixes a broken computer, but takes 2 seconds.<br>REST gives you energy back.<br><br>Now survive 90 seconds for real.';
+  panels(false,false);$('rk').textContent='';$('go').textContent='START REAL GAME';$('ov').style.display='flex'}}
+$('go').addEventListener('click',()=>{if(mode==='form'){const n=$('nm').value.trim(),b=$('br').value;if(!n||!b){$('err').textContent=!n?'Please enter your name.':'Please pick your branch.';return}player={name:n,branch:b};$('err').textContent='';mode='intro';si=0;panels(false,false);showSlide();return}
+ if(mode==='intro'){if(si<slides.length-1){si++;showSlide()}else{mode='play';startTut()}}else start()});
+$('skip').addEventListener('click',()=>{mode='play';start()});
+const BR=['CS','IT','EXTC','Electronics','Electrical','Mechanical','Production','Textile','Civil'];
+BR.forEach(b=>{const o=document.createElement('option');o.value=o.textContent=b;$('br').appendChild(o)});
+let player=null,db=null,uid=null,rows=[],live=false,denied=false,local=[];
+try{local=JSON.parse(localStorage.getItem('cdcs_lb')||'[]')}catch(e){}
+function saveLocal(){try{localStorage.setItem('cdcs_lb',JSON.stringify(local))}catch(e){}}
+function panels(f,l){$('form').style.display=f?'block':'none';$('lb').style.display=l?'block':'none';if(l)renderLB()}
+function renderLB(){
+ const box=$('lb');box.textContent='';
+ const t=document.createElement('div');t.className='lbl';t.textContent='LEADERBOARD';box.appendChild(t);
+ const src=live?rows:local.slice().sort((a,b)=>b.best-a.best).slice(0,10);
+ if(!src.length){const e=document.createElement('div');e.className='row';e.textContent='No scores yet. Be the first!';box.appendChild(e)}
+ src.forEach((x,i)=>{const d=document.createElement('div');d.className='row'+(player&&x.name===player.name&&x.branch===player.branch?' me':'');
+  const a=document.createElement('span');a.textContent=(i+1)+'. '+x.name+' · '+x.branch;
+  const b=document.createElement('span');b.textContent=x.best;d.append(a,b);box.appendChild(d)});
+ const n=document.createElement('div');n.className='note';
+ n.textContent=live?(denied?'Shared board is view-only for you, your score was not saved.':'Live board, shared with everyone.'):'Saved on this device only.';
+ box.appendChild(n)}
+async function submit(s){
+ if(!player)return;
+ if(db&&uid){try{
+  const ref=db.collection('scores').doc(uid),sn=await ref.get(),prev=sn.exists?(+sn.data().best||0):0;
+  if(!sn.exists||s>prev)await ref.set({name:player.name,branch:player.branch,best:Math.max(s,prev),ts:Date.now()});
+  return}catch(e){denied=true;renderLB();return}}
+ const k=local.find(x=>x.name===player.name&&x.branch===player.branch);
+ if(k)k.best=Math.max(k.best,s);else local.push({name:player.name,branch:player.branch,best:s});
+ saveLocal();renderLB()}
+(async()=>{try{
+ if(typeof claude==='undefined')return;
+ const u=await claude.use('user');uid=u&&u.id?await u.id():null;
+ const d=await claude.use('db');
+ if(d&&uid){db=d;db.collection('scores').orderBy('best','desc').limit(10).onSnapshot(sn=>{
+  rows=sn.docs.map(x=>{const v=x.data()||{};return{name:String(v.name||'?'),branch:String(v.branch||''),best:+v.best||0}});live=true;renderLB()},()=>{live=false;renderLB()})}
+}catch(e){}})();
+function showForm(){$('oh').textContent='KEEP IT RUNNING';$('ob').textContent='Enter your name and branch to start.';$('rk').textContent='';$('go').textContent='CONTINUE';$('skip').style.display='none';panels(true,true)}
+showForm();
+document.querySelectorAll('[data-a]').forEach(b=>b.addEventListener('pointerdown',()=>act(b.dataset.a)));
+addEventListener('keydown',e=>{const a=['restart','failover','recover','evict','wait'][+e.key-1];if(a)act(a)});
+</script></body></html>
