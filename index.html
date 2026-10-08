@@ -72,8 +72,56 @@ input,select{font:inherit;font-size:15px;padding:12px;border-radius:10px;border:
 #lb .row{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
 #lb .me{font-weight:700;color:var(--c1)}
 #lb .note{font-size:11px;color:var(--mut);margin-top:6px}
+#tools{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:10px;display:flex;gap:6px;z-index:30}
+#tools button{padding:6px 10px;font-size:12px}
+#ov{padding-top:56px}
+#modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:40;padding:16px}
+#modal>div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:360px;width:100%;max-height:80vh;overflow:auto;text-align:center}
+#modal #lb{margin-top:0;text-align:left}
+#mclose{margin-top:16px;width:100%}
+#qr .qrbox{background:#fff;display:inline-block;padding:10px;border-radius:10px;margin:12px 0 4px}
+#qr img{width:200px;height:200px;display:block}
+#qr .note{font-size:12px;color:var(--mut)}
+
+:root{--sh:0 1px 2px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.08)}
+.w{max-width:480px;padding:60px 16px 28px}
+h1{font-size:20px;letter-spacing:-.01em;margin:0 0 2px}
+.sub{color:var(--mut);font-size:13px;margin:0 0 18px}
+.top{gap:10px;align-items:stretch}
+.top>div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--sh)}
+.top span{font-size:28px;line-height:1.15}
+.meter{height:8px;border-radius:4px}
+.meter i{border-radius:4px;transition:width .15s linear}
+#grid{gap:12px}
+.n{border-radius:16px;box-shadow:var(--sh);min-height:104px;transition:transform .12s,background .2s,border-color .2s}
+.n:hover{transform:translateY(-2px)}
+.n:active{transform:scale(.97)}
+.n b{font-size:26px;letter-spacing:-.02em}
+.n .st::before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}
+.n.down .st::before{animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.25}}
+#hint{border:1px solid var(--line);border-left:5px solid var(--c2);border-radius:14px;box-shadow:var(--sh);font-size:14px;line-height:1.55;font-weight:500;padding:14px 16px}
+.bars{gap:12px}
+.bars>div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;box-shadow:var(--sh)}
+.acts{gap:8px}
+button[data-a]{border-radius:14px;padding:12px 0 10px;box-shadow:0 4px 0 rgba(0,0,0,.2);transition:transform .08s,box-shadow .08s}
+button[data-a]:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+#tools button{border-radius:999px;background:var(--card);box-shadow:var(--sh);font-weight:600}
+#ov>div{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 22px;box-shadow:0 20px 60px rgba(0,0,0,.15);animation:pop .25s}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}}
+#ov h2{font-size:22px;background:linear-gradient(90deg,var(--c1),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
+#go{width:100%;border-radius:12px;font-weight:600;box-shadow:0 4px 14px rgba(99,102,241,.35)}
+input,select{border-radius:12px}
+input:focus,select:focus{outline:2px solid var(--c1);outline-offset:1px}
+#modal>div{border-radius:18px}
+#lb .r1 span:first-child{color:#f59e0b;font-weight:700}
+#lb .r2 span:first-child{color:#94a3b8;font-weight:700}
+#lb .r3 span:first-child{color:#c2410c;font-weight:700}
+@media (max-width:400px){.acts{gap:5px}button[data-a]{font-size:11px}.top span{font-size:22px}#tools button{padding:5px 8px;font-size:11px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body><div class="w">
 <h1>KEEP IT RUNNING</h1>
+<div class="sub">Keep the 6 computers alive for 90 seconds</div>
 <div class="top">
 <div class="lbl">TIME<br><span id="t">90</span></div>
 <div class="lbl">ENERGY<div class="meter"><i id="me"></i></div></div>
@@ -101,7 +149,12 @@ input,select{font:inherit;font-size:15px;padding:12px;border-radius:10px;border:
 <div id="rk"></div>
 <button id="go">NEXT</button>
 <button id="skip">Skip practice</button>
+</div></div>
+<div id="tools"><button id="lbBtn">Leaderboard</button><button id="qrBtn">Play on phone</button></div>
+<div id="modal"><div>
 <div id="lb"></div>
+<div id="qr"><div class="lbl">PLAY ON YOUR PHONE</div><div class="qrbox"><img alt="QR code for cdcsgame.vercel.app" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPHN2ZyB3aWR0aD0iMzNtbSIgaGVpZ2h0PSIzM21tIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAzMyAzMyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNMiwySDNWM0gyek0zLDJINFYzSDN6TTQsMkg1VjNINHpNNSwySDZWM0g1ek02LDJIN1YzSDZ6TTcsMkg4VjNIN3pNOCwySDlWM0g4ek0xMSwySDEyVjNIMTF6TTE1LDJIMTZWM0gxNXpNMTYsMkgxN1YzSDE2ek0xNywySDE4VjNIMTd6TTE5LDJIMjBWM0gxOXpNMjAsMkgyMVYzSDIwek0yMSwySDIyVjNIMjF6TTIyLDJIMjNWM0gyMnpNMjQsMkgyNVYzSDI0ek0yNSwySDI2VjNIMjV6TTI2LDJIMjdWM0gyNnpNMjcsMkgyOFYzSDI3ek0yOCwySDI5VjNIMjh6TTI5LDJIMzBWM0gyOXpNMzAsMkgzMVYzSDMwek0yLDNIM1Y0SDJ6TTgsM0g5VjRIOHpNMTEsM0gxMlY0SDExek0xMiwzSDEzVjRIMTJ6TTE1LDNIMTZWNEgxNXpNMTYsM0gxN1Y0SDE2ek0xNywzSDE4VjRIMTd6TTE4LDNIMTlWNEgxOHpNMjIsM0gyM1Y0SDIyek0yNCwzSDI1VjRIMjR6TTMwLDNIMzFWNEgzMHpNMiw0SDNWNUgyek00LDRINVY1SDR6TTUsNEg2VjVINXpNNiw0SDdWNUg2ek04LDRIOVY1SDh6TTEwLDRIMTFWNUgxMHpNMTEsNEgxMlY1SDExek0xMiw0SDEzVjVIMTJ6TTEzLDRIMTRWNUgxM3pNMTUsNEgxNlY1SDE1ek0xNyw0SDE4VjVIMTd6TTIwLDRIMjFWNUgyMHpNMjIsNEgyM1Y1SDIyek0yNCw0SDI1VjVIMjR6TTI2LDRIMjdWNUgyNnpNMjcsNEgyOFY1SDI3ek0yOCw0SDI5VjVIMjh6TTMwLDRIMzFWNUgzMHpNMiw1SDNWNkgyek00LDVINVY2SDR6TTUsNUg2VjZINXpNNiw1SDdWNkg2ek04LDVIOVY2SDh6TTEwLDVIMTFWNkgxMHpNMTEsNUgxMlY2SDExek0xMyw1SDE0VjZIMTN6TTE0LDVIMTVWNkgxNHpNMTYsNUgxN1Y2SDE2ek0xNyw1SDE4VjZIMTd6TTE5LDVIMjBWNkgxOXpNMjAsNUgyMVY2SDIwek0yNCw1SDI1VjZIMjR6TTI2LDVIMjdWNkgyNnpNMjcsNUgyOFY2SDI3ek0yOCw1SDI5VjZIMjh6TTMwLDVIMzFWNkgzMHpNMiw2SDNWN0gyek00LDZINVY3SDR6TTUsNkg2VjdINXpNNiw2SDdWN0g2ek04LDZIOVY3SDh6TTEwLDZIMTFWN0gxMHpNMTEsNkgxMlY3SDExek0xMiw2SDEzVjdIMTJ6TTEzLDZIMTRWN0gxM3pNMTcsNkgxOFY3SDE3ek0xOCw2SDE5VjdIMTh6TTE5LDZIMjBWN0gxOXpNMjAsNkgyMVY3SDIwek0yMSw2SDIyVjdIMjF6TTIyLDZIMjNWN0gyMnpNMjQsNkgyNVY3SDI0ek0yNiw2SDI3VjdIMjZ6TTI3LDZIMjhWN0gyN3pNMjgsNkgyOVY3SDI4ek0zMCw2SDMxVjdIMzB6TTIsN0gzVjhIMnpNOCw3SDlWOEg4ek0xMCw3SDExVjhIMTB6TTExLDdIMTJWOEgxMXpNMTksN0gyMFY4SDE5ek0yMiw3SDIzVjhIMjJ6TTI0LDdIMjVWOEgyNHpNMzAsN0gzMVY4SDMwek0yLDhIM1Y5SDJ6TTMsOEg0VjlIM3pNNCw4SDVWOUg0ek01LDhINlY5SDV6TTYsOEg3VjlINnpNNyw4SDhWOUg3ek04LDhIOVY5SDh6TTEwLDhIMTFWOUgxMHpNMTIsOEgxM1Y5SDEyek0xNCw4SDE1VjlIMTR6TTE2LDhIMTdWOUgxNnpNMTgsOEgxOVY5SDE4ek0yMCw4SDIxVjlIMjB6TTIyLDhIMjNWOUgyMnpNMjQsOEgyNVY5SDI0ek0yNSw4SDI2VjlIMjV6TTI2LDhIMjdWOUgyNnpNMjcsOEgyOFY5SDI3ek0yOCw4SDI5VjlIMjh6TTI5LDhIMzBWOUgyOXpNMzAsOEgzMVY5SDMwek0xMCw5SDExVjEwSDEwek0xMyw5SDE0VjEwSDEzek0xNiw5SDE3VjEwSDE2ek0xOCw5SDE5VjEwSDE4ek0yMCw5SDIxVjEwSDIwek0yMSw5SDIyVjEwSDIxek0yLDEwSDNWMTFIMnpNNCwxMEg1VjExSDR6TTUsMTBINlYxMUg1ek02LDEwSDdWMTFINnpNNywxMEg4VjExSDd6TTgsMTBIOVYxMUg4ek0xMSwxMEgxMlYxMUgxMXpNMTMsMTBIMTRWMTFIMTN6TTE0LDEwSDE1VjExSDE0ek0xOCwxMEgxOVYxMUgxOHpNMTksMTBIMjBWMTFIMTl6TTI0LDEwSDI1VjExSDI0ek0yNSwxMEgyNlYxMUgyNXpNMjYsMTBIMjdWMTFIMjZ6TTI3LDEwSDI4VjExSDI3ek0yOCwxMEgyOVYxMUgyOHpNMiwxMUgzVjEySDJ6TTMsMTFINFYxMkgzek01LDExSDZWMTJINXpNMTIsMTFIMTNWMTJIMTJ6TTEzLDExSDE0VjEySDEzek0xNCwxMUgxNVYxMkgxNHpNMTUsMTFIMTZWMTJIMTV6TTE2LDExSDE3VjEySDE2ek0xNywxMUgxOFYxMkgxN3pNMjAsMTFIMjFWMTJIMjB6TTIxLDExSDIyVjEySDIxek0yMiwxMUgyM1YxMkgyMnpNMjMsMTFIMjRWMTJIMjN6TTI0LDExSDI1VjEySDI0ek0yNSwxMUgyNlYxMkgyNXpNMjYsMTFIMjdWMTJIMjZ6TTMwLDExSDMxVjEySDMwek0zLDEySDRWMTNIM3pNNCwxMkg1VjEzSDR6TTcsMTJIOFYxM0g3ek04LDEySDlWMTNIOHpNOSwxMkgxMFYxM0g5ek0xMSwxMkgxMlYxM0gxMXpNMTQsMTJIMTVWMTNIMTR6TTE1LDEySDE2VjEzSDE1ek0xNiwxMkgxN1YxM0gxNnpNMTcsMTJIMThWMTNIMTd6TTE4LDEySDE5VjEzSDE4ek0yMCwxMkgyMVYxM0gyMHpNMjUsMTJIMjZWMTNIMjV6TTIsMTNIM1YxNEgyek0zLDEzSDRWMTRIM3pNOSwxM0gxMFYxNEg5ek0xMSwxM0gxMlYxNEgxMXpNMTIsMTNIMTNWMTRIMTJ6TTE1LDEzSDE2VjE0SDE1ek0xNywxM0gxOFYxNEgxN3pNMjEsMTNIMjJWMTRIMjF6TTI0LDEzSDI1VjE0SDI0ek0yNiwxM0gyN1YxNEgyNnpNMjcsMTNIMjhWMTRIMjd6TTI5LDEzSDMwVjE0SDI5ek0yLDE0SDNWMTVIMnpNMywxNEg0VjE1SDN6TTUsMTRINlYxNUg1ek04LDE0SDlWMTVIOHpNOSwxNEgxMFYxNUg5ek0xMCwxNEgxMVYxNUgxMHpNMTMsMTRIMTRWMTVIMTN6TTE0LDE0SDE1VjE1SDE0ek0xNiwxNEgxN1YxNUgxNnpNMTcsMTRIMThWMTVIMTd6TTE5LDE0SDIwVjE1SDE5ek0yMiwxNEgyM1YxNUgyMnpNMjUsMTRIMjZWMTVIMjV6TTI3LDE0SDI4VjE1SDI3ek0yOCwxNEgyOVYxNUgyOHpNMiwxNUgzVjE2SDJ6TTQsMTVINVYxNkg0ek01LDE1SDZWMTZINXpNNywxNUg4VjE2SDd6TTksMTVIMTBWMTZIOXpNMTIsMTVIMTNWMTZIMTJ6TTEzLDE1SDE0VjE2SDEzek0xNCwxNUgxNVYxNkgxNHpNMTcsMTVIMThWMTZIMTd6TTE4LDE1SDE5VjE2SDE4ek0yMSwxNUgyMlYxNkgyMXpNMjIsMTVIMjNWMTZIMjJ6TTIzLDE1SDI0VjE2SDIzek0yNCwxNUgyNVYxNkgyNHpNMjUsMTVIMjZWMTZIMjV6TTI2LDE1SDI3VjE2SDI2ek0zMCwxNUgzMVYxNkgzMHpNNCwxNkg1VjE3SDR6TTgsMTZIOVYxN0g4ek05LDE2SDEwVjE3SDl6TTEzLDE2SDE0VjE3SDEzek0xNCwxNkgxNVYxN0gxNHpNMjAsMTZIMjFWMTdIMjB6TTIyLDE2SDIzVjE3SDIyek0yMywxNkgyNFYxN0gyM3pNMjUsMTZIMjZWMTdIMjV6TTI3LDE2SDI4VjE3SDI3ek0yOCwxNkgyOVYxN0gyOHpNMiwxN0gzVjE4SDJ6TTQsMTdINVYxOEg0ek01LDE3SDZWMThINXpNNywxN0g4VjE4SDd6TTEwLDE3SDExVjE4SDEwek0xMSwxN0gxMlYxOEgxMXpNMTIsMTdIMTNWMThIMTJ6TTE2LDE3SDE3VjE4SDE2ek0xOCwxN0gxOVYxOEgxOHpNMjAsMTdIMjFWMThIMjB6TTIyLDE3SDIzVjE4SDIyek0yNiwxN0gyN1YxOEgyNnpNMjksMTdIMzBWMThIMjl6TTIsMThIM1YxOUgyek0zLDE4SDRWMTlIM3pNNywxOEg4VjE5SDd6TTgsMThIOVYxOUg4ek05LDE4SDEwVjE5SDl6TTExLDE4SDEyVjE5SDExek0xMiwxOEgxM1YxOUgxMnpNMTMsMThIMTRWMTlIMTN6TTE4LDE4SDE5VjE5SDE4ek0xOSwxOEgyMFYxOUgxOXpNMjcsMThIMjhWMTlIMjd6TTI4LDE4SDI5VjE5SDI4ek0yLDE5SDNWMjBIMnpNNCwxOUg1VjIwSDR6TTUsMTlINlYyMEg1ek03LDE5SDhWMjBIN3pNOSwxOUgxMFYyMEg5ek0xMCwxOUgxMVYyMEgxMHpNMTQsMTlIMTVWMjBIMTR6TTE1LDE5SDE2VjIwSDE1ek0xNiwxOUgxN1YyMEgxNnpNMTcsMTlIMThWMjBIMTd6TTIxLDE5SDIyVjIwSDIxek0yMiwxOUgyM1YyMEgyMnpNMjMsMTlIMjRWMjBIMjN6TTI0LDE5SDI1VjIwSDI0ek0yNSwxOUgyNlYyMEgyNXpNMjYsMTlIMjdWMjBIMjZ6TTI4LDE5SDI5VjIwSDI4ek0zMCwxOUgzMVYyMEgzMHpNMiwyMEgzVjIxSDJ6TTQsMjBINVYyMUg0ek01LDIwSDZWMjFINXpNOCwyMEg5VjIxSDh6TTksMjBIMTBWMjFIOXpNMTAsMjBIMTFWMjFIMTB6TTExLDIwSDEyVjIxSDExek0xMiwyMEgxM1YyMUgxMnpNMTQsMjBIMTVWMjFIMTR6TTE1LDIwSDE2VjIxSDE1ek0xNiwyMEgxN1YyMUgxNnpNMTcsMjBIMThWMjFIMTd6TTE4LDIwSDE5VjIxSDE4ek0yMCwyMEgyMVYyMUgyMHpNMjQsMjBIMjVWMjFIMjR6TTI2LDIwSDI3VjIxSDI2ek0yOCwyMEgyOVYyMUgyOHpNMiwyMUgzVjIySDJ6TTcsMjFIOFYyMkg3ek0xMSwyMUgxMlYyMkgxMXpNMTMsMjFIMTRWMjJIMTN6TTE0LDIxSDE1VjIySDE0ek0xNSwyMUgxNlYyMkgxNXpNMTcsMjFIMThWMjJIMTd6TTIwLDIxSDIxVjIySDIwek0yMSwyMUgyMlYyMkgyMXpNMjIsMjFIMjNWMjJIMjJ6TTI1LDIxSDI2VjIySDI1ek0yNiwyMUgyN1YyMkgyNnpNMjksMjFIMzBWMjJIMjl6TTIsMjJIM1YyM0gyek03LDIySDhWMjNIN3pNOCwyMkg5VjIzSDh6TTExLDIySDEyVjIzSDExek0xMywyMkgxNFYyM0gxM3pNMTQsMjJIMTVWMjNIMTR6TTE2LDIySDE3VjIzSDE2ek0xNywyMkgxOFYyM0gxN3pNMTksMjJIMjBWMjNIMTl6TTIwLDIySDIxVjIzSDIwek0yMiwyMkgyM1YyM0gyMnpNMjMsMjJIMjRWMjNIMjN6TTI0LDIySDI1VjIzSDI0ek0yNSwyMkgyNlYyM0gyNXpNMjYsMjJIMjdWMjNIMjZ6TTI4LDIySDI5VjIzSDI4ek0yOSwyMkgzMFYyM0gyOXpNMzAsMjJIMzFWMjNIMzB6TTEwLDIzSDExVjI0SDEwek0xMiwyM0gxM1YyNEgxMnpNMTQsMjNIMTVWMjRIMTR6TTE3LDIzSDE4VjI0SDE3ek0xOCwyM0gxOVYyNEgxOHpNMTksMjNIMjBWMjRIMTl6TTIwLDIzSDIxVjI0SDIwek0yMSwyM0gyMlYyNEgyMXpNMjIsMjNIMjNWMjRIMjJ6TTI2LDIzSDI3VjI0SDI2ek0yNywyM0gyOFYyNEgyN3pNMjgsMjNIMjlWMjRIMjh6TTI5LDIzSDMwVjI0SDI5ek0zMCwyM0gzMVYyNEgzMHpNMiwyNEgzVjI1SDJ6TTMsMjRINFYyNUgzek00LDI0SDVWMjVINHpNNSwyNEg2VjI1SDV6TTYsMjRIN1YyNUg2ek03LDI0SDhWMjVIN3pNOCwyNEg5VjI1SDh6TTExLDI0SDEyVjI1SDExek0xMiwyNEgxM1YyNUgxMnpNMTQsMjRIMTVWMjVIMTR6TTE5LDI0SDIwVjI1SDE5ek0yMSwyNEgyMlYyNUgyMXpNMjIsMjRIMjNWMjVIMjJ6TTI0LDI0SDI1VjI1SDI0ek0yNiwyNEgyN1YyNUgyNnpNMjcsMjRIMjhWMjVIMjd6TTI4LDI0SDI5VjI1SDI4ek0yLDI1SDNWMjZIMnpNOCwyNUg5VjI2SDh6TTEwLDI1SDExVjI2SDEwek0xMSwyNUgxMlYyNkgxMXpNMTIsMjVIMTNWMjZIMTJ6TTEzLDI1SDE0VjI2SDEzek0xNCwyNUgxNVYyNkgxNHpNMTYsMjVIMTdWMjZIMTZ6TTE4LDI1SDE5VjI2SDE4ek0yMSwyNUgyMlYyNkgyMXpNMjIsMjVIMjNWMjZIMjJ6TTI2LDI1SDI3VjI2SDI2ek0yOSwyNUgzMFYyNkgyOXpNMiwyNkgzVjI3SDJ6TTQsMjZINVYyN0g0ek01LDI2SDZWMjdINXpNNiwyNkg3VjI3SDZ6TTgsMjZIOVYyN0g4ek0xMCwyNkgxMVYyN0gxMHpNMTEsMjZIMTJWMjdIMTF6TTEyLDI2SDEzVjI3SDEyek0xMywyNkgxNFYyN0gxM3pNMTQsMjZIMTVWMjdIMTR6TTE4LDI2SDE5VjI3SDE4ek0yMCwyNkgyMVYyN0gyMHpNMjIsMjZIMjNWMjdIMjJ6TTIzLDI2SDI0VjI3SDIzek0yNCwyNkgyNVYyN0gyNHpNMjUsMjZIMjZWMjdIMjV6TTI2LDI2SDI3VjI3SDI2ek0yOCwyNkgyOVYyN0gyOHpNMzAsMjZIMzFWMjdIMzB6TTIsMjdIM1YyOEgyek00LDI3SDVWMjhINHpNNSwyN0g2VjI4SDV6TTYsMjdIN1YyOEg2ek04LDI3SDlWMjhIOHpNMTAsMjdIMTFWMjhIMTB6TTExLDI3SDEyVjI4SDExek0xNCwyN0gxNVYyOEgxNHpNMTYsMjdIMTdWMjhIMTZ6TTE3LDI3SDE4VjI4SDE3ek0xOSwyN0gyMFYyOEgxOXpNMjAsMjdIMjFWMjhIMjB6TTIyLDI3SDIzVjI4SDIyek0yNywyN0gyOFYyOEgyN3pNMjgsMjdIMjlWMjhIMjh6TTIsMjhIM1YyOUgyek00LDI4SDVWMjlINHpNNSwyOEg2VjI5SDV6TTYsMjhIN1YyOUg2ek04LDI4SDlWMjlIOHpNMTAsMjhIMTFWMjlIMTB6TTEyLDI4SDEzVjI5SDEyek0xNCwyOEgxNVYyOUgxNHpNMTcsMjhIMThWMjlIMTd6TTE4LDI4SDE5VjI5SDE4ek0xOSwyOEgyMFYyOUgxOXpNMjEsMjhIMjJWMjlIMjF6TTIyLDI4SDIzVjI5SDIyek0yMywyOEgyNFYyOUgyM3pNMjQsMjhIMjVWMjlIMjR6TTI1LDI4SDI2VjI5SDI1ek0yNiwyOEgyN1YyOUgyNnpNMjcsMjhIMjhWMjlIMjd6TTI4LDI4SDI5VjI5SDI4ek0yOSwyOEgzMFYyOUgyOXpNMiwyOUgzVjMwSDJ6TTgsMjlIOVYzMEg4ek0xMywyOUgxNFYzMEgxM3pNMTcsMjlIMThWMzBIMTd6TTE5LDI5SDIwVjMwSDE5ek0yMCwyOUgyMVYzMEgyMHpNMjIsMjlIMjNWMzBIMjJ6TTI1LDI5SDI2VjMwSDI1ek0yNywyOUgyOFYzMEgyN3pNMjksMjlIMzBWMzBIMjl6TTIsMzBIM1YzMUgyek0zLDMwSDRWMzFIM3pNNCwzMEg1VjMxSDR6TTUsMzBINlYzMUg1ek02LDMwSDdWMzFINnpNNywzMEg4VjMxSDd6TTgsMzBIOVYzMUg4ek0xMCwzMEgxMVYzMUgxMHpNMTIsMzBIMTNWMzFIMTJ6TTEzLDMwSDE0VjMxSDEzek0xNSwzMEgxNlYzMUgxNXpNMTYsMzBIMTdWMzFIMTZ6TTE3LDMwSDE4VjMxSDE3ek0yNiwzMEgyN1YzMUgyNnpNMjgsMzBIMjlWMzFIMjh6IiBpZD0icXItcGF0aCIgZmlsbD0iIzAwMDAwMCIgZmlsbC1vcGFjaXR5PSIxIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHN0cm9rZT0ibm9uZSIvPjwvc3ZnPg=="></div><div class="note">Scan to open cdcsgame.vercel.app</div></div>
+<button id="mclose">Close</button>
 </div></div>
 <script>
 const N=6,DUR=90,$=id=>document.getElementById(id),pad=i=>String(i+1).padStart(2,'0');
@@ -114,7 +167,7 @@ const avail=i=>{const n=S.nodes[i];return up(n)||n.fo&&up(S.nodes[(i+1)%N])};
 const alive=()=>S.nodes.map((n,i)=>up(n)?i:-1).filter(i=>i>=0);
 function log(m){S.msgs.unshift(m);S.msgs.length=Math.min(S.msgs.length,2);$('log').innerHTML=S.msgs.join('<br>')}
 function start(){
- S={t:0,en:100,loss:0,pr:10,ev:3,tu:0,td:0,tc:0,ticks:0,dead:0,over:false,msgs:[],
+ S={t:0,en:100,loss:0,pr:10,ev:5,tu:0,td:0,tc:0,ticks:0,dead:0,over:false,msgs:[],
   nodes:Array.from({length:N},()=>({s:'up',boot:0,fo:false,stale:false}))};
  $('ov').style.display='none';$('skip').style.display='none';$('log').innerHTML='';
  clearInterval(timer);timer=setInterval(tick,100);draw()}
@@ -123,16 +176,16 @@ function tick(){
  const dt=.1;S.t+=dt;S.ticks++;
  S.en=Math.min(100,S.en+(S.loss>40?5:10)*dt);
  S.loss=Math.max(0,S.loss-10*dt);
- S.pr=Math.min(100,S.pr+(.8+S.loss/80)*dt);
+ S.pr=Math.min(100,S.pr+(.5+S.loss/120)*dt);
  S.ev-=dt;
- if(S.ev<=0){S.ev=5+Math.random()*3;
+ if(S.ev<=0){S.ev=7+Math.random()*4;
   if(Math.random()<.5){const u=alive();if(u.length)crash(u[Math.random()*u.length|0])}
   else{S.loss=40+Math.random()*30;log('BAD INTERNET')}
   if(S.pr>60&&Math.random()<.5)log('MEMORY ALMOST FULL')}
  if(S.pr>85&&Math.random()<.02){const u=alive();if(u.length)crash(u[Math.random()*u.length|0])}
  S.nodes.forEach((n,i)=>{
   if(n.s==='boot'){n.boot-=dt;if(n.boot<=0){n.s='up';n.fo=false;log('COMPUTER '+pad(i)+' IS BACK')}}
-  if(up(n)&&Math.random()<S.loss/100*.006)n.stale=true});
+  if(up(n)&&Math.random()<S.loss/100*.004)n.stale=true});
  const nu=alive().length,da=S.nodes.filter((_,i)=>avail(i)).length/N,
   co=1-S.nodes.filter((n,i)=>n.stale&&avail(i)).length/N-S.nodes.filter((n,i)=>!avail(i)).length/N*.5;
  S.tu+=nu>=4?1:nu/6*.5;S.td+=da;S.tc+=Math.max(0,co);
@@ -205,13 +258,18 @@ BR.forEach(b=>{const o=document.createElement('option');o.value=o.textContent=b;
 let player=null,db=null,uid=null,rows=[],live=false,denied=false,local=[];
 try{local=JSON.parse(localStorage.getItem('cdcs_lb')||'[]')}catch(e){}
 function saveLocal(){try{localStorage.setItem('cdcs_lb',JSON.stringify(local))}catch(e){}}
-function panels(f,l){$('form').style.display=f?'block':'none';$('lb').style.display=l?'block':'none';if(l)renderLB()}
+function panels(f){$('form').style.display=f?'block':'none'}
+function openModal(w){$('modal').style.display='flex';$('lb').style.display=w==='lb'?'block':'none';$('qr').style.display=w==='qr'?'block':'none';if(w==='lb')renderLB()}
+$('lbBtn').addEventListener('click',()=>openModal('lb'));
+$('qrBtn').addEventListener('click',()=>openModal('qr'));
+$('mclose').addEventListener('click',()=>{$('modal').style.display='none'});
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))$('modal').style.display='none'});
 function renderLB(){
  const box=$('lb');box.textContent='';
  const t=document.createElement('div');t.className='lbl';t.textContent='LEADERBOARD';box.appendChild(t);
  const src=live?rows:local.slice().sort((a,b)=>b.best-a.best).slice(0,10);
  if(!src.length){const e=document.createElement('div');e.className='row';e.textContent='No scores yet. Be the first!';box.appendChild(e)}
- src.forEach((x,i)=>{const d=document.createElement('div');d.className='row'+(player&&x.name===player.name&&x.branch===player.branch?' me':'');
+ src.forEach((x,i)=>{const d=document.createElement('div');d.className='row r'+(i+1)+(player&&x.name===player.name&&x.branch===player.branch?' me':'');
   const a=document.createElement('span');a.textContent=(i+1)+'. '+x.name+' · '+x.branch;
   const b=document.createElement('span');b.textContent=x.best;d.append(a,b);box.appendChild(d)});
  const n=document.createElement('div');n.className='note';
