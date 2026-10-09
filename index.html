@@ -255,7 +255,7 @@ $('go').addEventListener('click',()=>{if(mode==='form'){const n=$('nm').value.tr
 $('skip').addEventListener('click',()=>{mode='play';start()});
 const BR=['CS','IT','EXTC','Electronics','Electrical','Mechanical','Production','Textile','Civil'];
 BR.forEach(b=>{const o=document.createElement('option');o.value=o.textContent=b;$('br').appendChild(o)});
-let player=null,db=null,uid=null,rows=[],live=false,denied=false,local=[];
+let player=null,rows=[],live=false,local=[];
 try{local=JSON.parse(localStorage.getItem('cdcs_lb')||'[]')}catch(e){}
 function saveLocal(){try{localStorage.setItem('cdcs_lb',JSON.stringify(local))}catch(e){}}
 function panels(f){$('form').style.display=f?'block':'none'}
@@ -273,24 +273,24 @@ function renderLB(){
   const a=document.createElement('span');a.textContent=(i+1)+'. '+x.name+' · '+x.branch;
   const b=document.createElement('span');b.textContent=x.best;d.append(a,b);box.appendChild(d)});
  const n=document.createElement('div');n.className='note';
- n.textContent=live?(denied?'Shared board is view-only for you, your score was not saved.':'Live board, shared with everyone.'):'Saved on this device only.';
+ n.textContent=live?'Live board, shared with everyone.':'Saved on this device only.';
  box.appendChild(n)}
+async function fetchLB(){
+ try{const r=await fetch('/api/scores');if(!r.ok)throw 0;rows=await r.json();live=true}
+ catch(e){live=false}
+ renderLB()}
 async function submit(s){
  if(!player)return;
- if(db&&uid){try{
-  const ref=db.collection('scores').doc(uid),sn=await ref.get(),prev=sn.exists?(+sn.data().best||0):0;
-  if(!sn.exists||s>prev)await ref.set({name:player.name,branch:player.branch,best:Math.max(s,prev),ts:Date.now()});
-  return}catch(e){denied=true;renderLB();return}}
- const k=local.find(x=>x.name===player.name&&x.branch===player.branch);
- if(k)k.best=Math.max(k.best,s);else local.push({name:player.name,branch:player.branch,best:s});
- saveLocal();renderLB()}
-(async()=>{try{
- if(typeof claude==='undefined')return;
- const u=await claude.use('user');uid=u&&u.id?await u.id():null;
- const d=await claude.use('db');
- if(d&&uid){db=d;db.collection('scores').orderBy('best','desc').limit(10).onSnapshot(sn=>{
-  rows=sn.docs.map(x=>{const v=x.data()||{};return{name:String(v.name||'?'),branch:String(v.branch||''),best:+v.best||0}});live=true;renderLB()},()=>{live=false;renderLB()})}
-}catch(e){}})();
+ try{
+  const r=await fetch('/api/scores',{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({name:player.name,branch:player.branch,score:s})});
+  if(!r.ok)throw 0;
+  return fetchLB()}
+ catch(e){
+  const k=local.find(x=>x.name===player.name&&x.branch===player.branch);
+  if(k)k.best=Math.max(k.best,s);else local.push({name:player.name,branch:player.branch,best:s});
+  saveLocal();renderLB()}}
+fetchLB();setInterval(fetchLB,8000);
 function showForm(){$('oh').textContent='KEEP IT RUNNING';$('ob').textContent='Enter your name and branch to start.';$('rk').textContent='';$('go').textContent='CONTINUE';$('skip').style.display='none';panels(true,true)}
 showForm();
 document.querySelectorAll('[data-a]').forEach(b=>b.addEventListener('pointerdown',()=>act(b.dataset.a)));
